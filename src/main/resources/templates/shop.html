@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCkyULpS639gxJ8lQ-pwEU1fOHVR3R2bY" async defer></script>
+    <style>
+        .clickable{
+            cursor: pointer;
+        }
+    </style>
+    <script>
+
+    </script>
+    <script type="text/javascript">
+        var app = angular.module('app', []);
+
+        app.controller('MainCtrl', function($scope, $http) {
+            $scope.loadCustomers = function(){
+                var url = "/api/1.0/customer/list";
+                $http.get(url).
+                success(function(data, status, headers, config) {
+                    if(data){
+                        $scope.customerList = data;
+                    }
+                }).
+                error(function(data, status, headers, config) {
+                });
+            };
+
+            $scope.loadOrders = function(){
+                var url = "/api/1.0/order/list";
+                $http.get(url).
+                success(function(data, status, headers, config) {
+                    if(data){
+                        $scope.orderList = data;
+                    }
+                }).
+                error(function(data, status, headers, config) {
+                });
+            };
+
+            $scope.submitOrder = function(customer){
+                if(customer && customer.id){
+                    var url = "/api/1.0/order/save";
+                    var postData = {};
+                    postData.customer = {};
+                    postData.customer = customer;
+
+                    $http.post(url, postData).
+                    success(function(data, status, headers, config) {
+                        if(data){
+                            $scope.selectedOrder = data;
+                            $scope.markOrderOnMap($scope.selectedOrder);
+                            $scope.loadOrders();
+                        }
+                    }).
+                    error(function(data, status, headers, config) {
+                    });
+                }
+            };
+
+            $scope.markOrderOnMap = function(order){
+                var markers = [
+                    ["3. "+(order.customer.firstname + ' '+ order.customer.lastname) + ": "+order.customer.geoLocation.name, order.customer.geoLocation.geoLat, order.customer.geoLocation.geoLng],
+                    ["2. Store: "+order.store.geoLocation.name, order.store.geoLocation.geoLat, order.store.geoLocation.geoLng],
+                    ["1. Depot: "+order.depot.geoLocation.name, order.depot.geoLocation.geoLat, order.depot.geoLocation.geoLng]
+                ];
+
+                $scope.initMap(markers)
+            };
+
+            $scope.initMap =  function(markers) {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: markers[0][1], lng: markers[0][2]},
+                    zoom: 15
+                });
+
+                var bounds = new google.maps.LatLngBounds();
+                var infoWindow = new google.maps.InfoWindow(), marker, i;
+
+                for( i = 0; i < markers.length; i++ ) {
+                    var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+                    bounds.extend(position);
+                    marker = new google.maps.Marker({
+                        position: position,
+                        map: map,
+                        title: markers[i][0]
+                    });
+
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infoWindow.setContent(infoWindowContent[i][0]);
+                            infoWindow.open(map, marker);
+                        }
+                    })(marker, i));
+
+                    // Center the map to fit all markers on the screen
+                    map.fitBounds(bounds);
+                }
+            };
+
+            $scope.handleLocationError =  function(browserHasGeolocation, infoWindow, pos) {
+                infoWindow.setPosition(pos);
+                infoWindow.setContent(browserHasGeolocation ?
+                    'Error: The Geolocation service failed.' :
+                    'Error: Your browser doesn\'t support geolocation.');
+            };
+
+            /*function setCenter(lat,lng){
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: lat, lng: lng},
+                    zoom: 6
+                });
+                var pos = {
+                    lat: lat,
+                    lng: lng
+                };
+                var infoWindow = new google.maps.InfoWindow({map: map});
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Location found');
+            }*/
+        });
+    </script>
+
+    <title>Shop</title>
+</head>
+<body ng-app="app">
+<div ng-controller="MainCtrl">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="jumbotron jumbotron-fluid" ng-init="loadCustomers();">
+                    <div class="container-fluid">
+                        <h1 class="display-4">Order as customer</h1>
+
+                        <button type="button" class="btn btn-outline-primary btn" ng-click="submitOrder(customer)" ng-repeat="customer in customerList">
+                            {{customer.firstname}} {{customer.lastname}}
+                        </button>
+                    </div>
+                </div>
+                <div style ="height: 400px; background-color: white;"id="map"></div>
+            </div>
+            <div class="col-sm-5">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container-fluid" ng-init="loadOrders()">
+
+
+                        <h1 class="display-4">Current orders</h1>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Customer</th>
+                                <th scope="col">Depot</th>
+                                <th scope="col">Shop</th>
+                                <th scope="col">Distance (km)</th>
+                                <th scope="col">Duration (min)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="order in orderList" ng-click="markOrderOnMap(order)" class="clickable">
+                                <th scope="row">{{order.id}}</th>
+                                <td><div title="{{order.customer.geoLocation.name}}">{{order.customer.firstname}} {{order.customer.lastname}}</div></td>
+                                <td><div title="{{order.depot.geoLocation.name}}">{{order.depot.name}}</div></td>
+                                <td><div title="{{order.store.geoLocation.name}}">{{order.store.name}}</div></td>
+                                <td>{{order.shippingDistance}}</td>
+                                <td>{{order.formatedDeliveryTimeInMinutesAndSeconds}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div >
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
