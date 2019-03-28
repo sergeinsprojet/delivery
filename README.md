@@ -34,3 +34,22 @@ Assumtions: You can pre- calculate the GPS coordinates and use these in your sof
 The drone has a velocity of 60 km/h. No time for pick-up and hand-over is required.
 
 Work with programming paradigms that you find appropriate and suitable.
+
+--------------------
+
+Applied technology:
+
+Back-End:
+
+* Spring Boot 2.1.3
+* Java 1.8
+* Database: local H2
+
+Front-End:
+
+* Bootrastrap 4.3.1
+* JQuery 3.3.1
+* AngularJs 1.5.8
+
+--------------------
+
