@@ -8,6 +8,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "facility")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+        discriminatorType = DiscriminatorType.STRING,
+        name = "facility_type",
+        columnDefinition = "text"
+)
 public class Facility {
     @Id
     @SequenceGenerator(name = "sequenceGenerator")
@@ -41,6 +47,4 @@ public class Facility {
     public void setGeoLocation(GeoLocation geoLocation){
         this.geoLocation = geoLocation;
     }
-
-
 }

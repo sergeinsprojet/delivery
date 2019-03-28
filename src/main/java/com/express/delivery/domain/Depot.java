@@ -8,39 +8,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "depot")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Depot{
-    @Id
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-    private String name;
-
-    @OneToOne
-    @JoinColumn(name = "geo_location_id")
-    GeoLocation geoLocation;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public GeoLocation getGeoLocation(){
-        return geoLocation;
-    }
-
-    public void setGeoLocation(GeoLocation geoLocation){
-        this.geoLocation = geoLocation;
-    }
+@DiscriminatorValue("DEPOT")
+public class Depot extends Facility{
 
 }
 

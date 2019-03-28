@@ -185,13 +185,13 @@ public class BootstrapDataInitiator implements InitializingBean {
         storeRepository.save(store3);
 
         Depot depot1 = new Depot();
-        depot1.setId(Long.valueOf(1));
+        depot1.setId(Long.valueOf(4));
         depot1.setName("Depot 1");
         depot1.setGeoLocation(depotGeolocation1);
         depotRepository.save(depot1);
 
         Depot depot2 = new Depot();
-        depot2.setId(Long.valueOf(2));
+        depot2.setId(Long.valueOf(5));
         depot2.setName("Depot 2");
         depot2.setGeoLocation(depotGeolocation2);
         depotRepository.save(depot2);

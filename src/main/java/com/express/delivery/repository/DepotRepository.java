@@ -21,8 +21,9 @@ public interface DepotRepository extends CrudRepository<Depot, Long> {
             " * cos( radians( gl.geo_lng ) - radians(?1) ) + sin( radians(?2) )"+
             " * sin( radians( gl.geo_lat ) ) ) )"+
             " AS shortest_distance "+
-            " FROM depot as s"+
+            " FROM facility as s"+
             " JOIN geo_location AS gl ON s.geo_location_id=gl.id "+
+            " WHERE s.facility_type='DEPOT'"+
             " ORDER BY shortest_distance LIMIT 1",nativeQuery = true)
     Depot findClosestDepotByLngAndLat(BigDecimal geoLng, BigDecimal geoLat);
 }

@@ -19,8 +19,9 @@ public interface StoreRepository extends CrudRepository<Store, Long> {
             " * cos( radians( gl.geo_lng ) - radians(?1) ) + sin( radians(?2) )"+
             " * sin( radians( gl.geo_lat ) ) ) )"+
             " AS shortest_distance "+
-            " FROM store as s"+
+            " FROM facility as s"+
             " JOIN geo_location AS gl ON s.geo_location_id=gl.id "+
+            " WHERE s.facility_type='STORE'"+
             " ORDER BY shortest_distance LIMIT 1",nativeQuery = true)
     Store findClosestStoreByLngAndLat(BigDecimal geoLng, BigDecimal geoLat);
 }

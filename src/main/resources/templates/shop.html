@@ -67,8 +67,8 @@
             $scope.markOrderOnMap = function(order){
                 var markers = [
                     ["3. "+(order.customer.firstname + ' '+ order.customer.lastname) + ": "+order.customer.geoLocation.name, order.customer.geoLocation.geoLat, order.customer.geoLocation.geoLng],
-                    ["2. Store: "+order.store.geoLocation.name, order.store.geoLocation.geoLat, order.store.geoLocation.geoLng],
-                    ["1. Depot: "+order.depot.geoLocation.name, order.depot.geoLocation.geoLat, order.depot.geoLocation.geoLng]
+                    ["2. "+order.store.name+": "+order.store.geoLocation.name, order.store.geoLocation.geoLat, order.store.geoLocation.geoLng],
+                    ["1. "+order.depot.name+": "+order.depot.geoLocation.name, order.depot.geoLocation.geoLat, order.depot.geoLocation.geoLng]
                 ];
 
                 $scope.initMap(markers)
@@ -163,7 +163,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="order in orderList" ng-click="markOrderOnMap(order)" class="clickable">
+                            <tr ng-repeat="order in orderList | orderBy:'id':true" ng-click="markOrderOnMap(order)" class="clickable">
                                 <th scope="row">{{order.id}}</th>
                                 <td><div title="{{order.customer.geoLocation.name}}">{{order.customer.firstname}} {{order.customer.lastname}}</div></td>
                                 <td><div title="{{order.depot.geoLocation.name}}">{{order.depot.name}}</div></td>
