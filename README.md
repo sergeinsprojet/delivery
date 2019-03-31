@@ -1,8 +1,9 @@
 # drone-delivery-app
 Express shipping with unmanned aerial vehicles ("drones")
+--------------------------------------------------------
 
 
-Traiding company is looking into express shipping with unmanned aerial vehicles ("drones").
+Trading company is looking into express shipping with unmanned aerial vehicles ("drones").
 
 There is a fleet of drones in two locations available:
 Metrostrasse 12, 40235 Düsseldorf
@@ -38,6 +39,7 @@ Work with programming paradigms that you find appropriate and suitable.
 --------------------
 
 Applied technology:
+-------------------
 
 Back-End:
 
@@ -50,6 +52,14 @@ Front-End:
 * Bootrastrap 4.3.1
 * JQuery 3.3.1
 * AngularJs 1.5.8
+* Maps JavaScript API
+
+Applied algorithms
+------------------
+
+* Dijkstra's shortest path first reversed algorithm (based on https://www.baeldung.com/java-dijkstra) where delivery address (customer address) is used as starting node and available drone depots are the finish nodes. Stores are the neighbors which must be visited. As a result we have a list of shortest distances between the path: from selected customer over any store to any depot. The shortest path is selected. This algorithm can be applied with any number of stores and depots.
+
+* Calculating distance between two points by their latitude and longitude using trigonometric functions (https://developers.google.com/maps/solutions/store-locator/clothing-store-locator#findnearsql)
 
 --------------------
 
