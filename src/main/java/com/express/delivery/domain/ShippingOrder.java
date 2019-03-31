@@ -1,9 +1,13 @@
 package com.express.delivery.domain;
 
+import com.express.delivery.services.DijkstraAlgorithmService;
+import com.express.delivery.services.ShippingOrderService;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -69,17 +73,8 @@ public class ShippingOrder {
     }
 
     public BigDecimal getShippingDistance(){
-        Double distance = calculateDistanceFromA2B(depot.getGeoLocation(),store.getGeoLocation()) + calculateDistanceFromA2B(store.getGeoLocation(),customer.getGeoLocation());
+        Double distance = ShippingOrderService.calculateDistanceFromA2B(depot.getGeoLocation(),store.getGeoLocation()) + ShippingOrderService.calculateDistanceFromA2B(store.getGeoLocation(),customer.getGeoLocation());
         return new BigDecimal(distance).setScale(2, BigDecimal.ROUND_HALF_UP);
-    }
-
-    public Double calculateDistanceFromA2B(GeoLocation locationA, GeoLocation locationB){
-        Double distance = ( 6371 * Math.acos( Math.cos( Math.toRadians(locationA.getGeoLat().doubleValue()) ) * Math.cos( Math.toRadians( locationB.getGeoLat().doubleValue() ) )
-                * Math.cos( Math.toRadians( locationB.getGeoLng().doubleValue() ) - Math.toRadians(locationA.getGeoLng().doubleValue()) )
-                + Math.sin( Math.toRadians(locationA.getGeoLat().doubleValue()) )
-                * Math.sin( Math.toRadians( locationB.getGeoLat().doubleValue() ) ) ) );
-
-        return distance;
     }
 
     public String getFormatedDeliveryTimeInMinutesAndSeconds(){

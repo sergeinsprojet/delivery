@@ -1,5 +1,6 @@
 package com.express.delivery.repository;
 
+import com.express.delivery.domain.Depot;
 import com.express.delivery.domain.GeoLocation;
 import com.express.delivery.domain.Store;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,6 @@ public interface StoreRepository extends CrudRepository<Store, Long> {
             " WHERE s.facility_type='STORE'"+
             " ORDER BY shortest_distance LIMIT 1",nativeQuery = true)
     Store findClosestStoreByLngAndLat(BigDecimal geoLng, BigDecimal geoLat);
+
+    public Store findByGeoLocation(GeoLocation geoLocation);
 }

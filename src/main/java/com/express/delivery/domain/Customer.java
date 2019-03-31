@@ -55,6 +55,9 @@ public class Customer {
     }
 
 
+    public String getFullname(){
+        return (this.firstname + " " +this.lastname);
+    }
 }
 
 

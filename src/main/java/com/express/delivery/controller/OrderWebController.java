@@ -7,10 +7,13 @@ import com.express.delivery.domain.Store;
 import com.express.delivery.repository.CustomerRepository;
 import com.express.delivery.repository.ShippingOrderRepository;
 import com.express.delivery.services.ShippingOrderService;
+import com.express.delivery.vo.ShortestPathVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -30,17 +33,10 @@ public class OrderWebController {
 
     @RequestMapping("/api/1.0/order/save")
     public ShippingOrder saveApi(@RequestBody ShippingOrder shippingOrder) {
-        GeoLocation geoLocation = shippingOrder.getCustomer().getGeoLocation();
-        Store closestStore = shippingOrderService.findClosestStoreByDeliveryAddress(geoLocation);
-        Depot closestDepot = shippingOrderService.findClosestDepotByStoreAddress(closestStore.getGeoLocation());
-        shippingOrder.setStore(closestStore);
-        shippingOrder.setDepot(closestDepot);
+        ShortestPathVO shortestPathVO =  shippingOrderService.findShortestPath(shippingOrder.getCustomer());
+        shippingOrder.setStore(shortestPathVO.getStore());
+        shippingOrder.setDepot(shortestPathVO.getDepot());
         orderRepository.save(shippingOrder);
         return shippingOrder;
     }
-
-    /*Double[] values = [nearStatement.lat as Double, nearStatement.lng as Double, nearStatement.lat as Double, nearStatement.radius as Double] as Double[]
-                Type[] types = [Hibernate.DOUBLE, Hibernate.DOUBLE, Hibernate.DOUBLE, Hibernate.DOUBLE] as Type[]
-                valueCriterion = Restrictions.sqlRestriction("( 6371* acos( cos( radians(?) ) * cos( radians( value_.geo_lat_value ) ) * cos( radians( value_.geo_lng_value ) - radians(?) ) + sin( radians(?) ) * sin( radians( value_.geo_lat_value ) ) ) ) < ? ", values, types)
-*/
 }
