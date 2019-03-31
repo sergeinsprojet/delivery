@@ -57,7 +57,7 @@ Front-End:
 Applied algorithms
 ------------------
 
-* Dijkstra's shortest path first reversed algorithm (based on https://www.baeldung.com/java-dijkstra) where delivery address (customer address) is used as starting node and available drone depots are the finish nodes. Stores are the neighbors which must be visited. As a result we have a list of shortest distances between the path: from selected customer over any store to any depot. The shortest path is selected. This algorithm can be applied with any number of stores and depots.
+* Dijkstra's shortest path first reversed algorithm (based on https://www.baeldung.com/java-dijkstra) where delivery address (customer address) is used as starting node and available drone depots are the finish nodes. Stores are the neighbors which must be visited. As a result we have a list of shortest distances between the path: from selected customer over any store to any depot. The shortest path is selected. This algorithm can be applied to any number of stores and depots.
 
 * Calculating distance between two points by their latitude and longitude using trigonometric functions (https://developers.google.com/maps/solutions/store-locator/clothing-store-locator#findnearsql)
 
