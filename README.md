@@ -17,11 +17,11 @@ C4 : Schlesische Straße 5, 40231 Düsseldorf
 
 Traiding company can supply goods out of these following locations:
 
-Schiessstraße 31, 40549 Düsseldorf
-Friedrichstraße 152, 40217 Düsseldorf
-Breslauer Str. 2, 41460 Neuss
-Bataverstraße 93, 41462 Neuss
-Am Sandbach 30, 40878 Ratingen
+- Schiessstraße 31, 40549 Düsseldorf
+- Friedrichstraße 152, 40217 Düsseldorf
+- Breslauer Str. 2, 41460 Neuss
+- Bataverstraße 93, 41462 Neuss
+- Am Sandbach 30, 40878 Ratingen
 
 The process of delivery works like this:
 - The orders are pre-picked and can be picked up without delay from the stores above
